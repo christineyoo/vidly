@@ -9,6 +9,8 @@ class Movies extends React.Component {
 
   handleDelete = movie => {
       this.setState({ count: this.state.count - 1 });
+      const removedMovieIndex = this.state.movies.indexOf(movie);
+      this.setState({ movies: this.state.movies.filter((movie, i) => i !== removedMovieIndex)})
   }
 
   render() {
@@ -31,7 +33,7 @@ class Movies extends React.Component {
                     <td>{movie.genre.name}</td>
                     <td>{movie.numberInStock}</td>
                     <td>{movie.dailyRentalRate}</td>
-                    <td><button type="button" class="btn btn-danger" onClick={this.handleDelete}>Delete</button></td>
+                    <td><button type="button" className="btn btn-danger" onClick={() => this.handleDelete(movie)}>Delete</button></td>
                 </tr>
             ))}
             </tbody>
