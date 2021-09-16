@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { getMovies } from '../services/fakeMovieService';
+import Like from './common/like';
 
 class Movies extends React.Component {
   state = {
@@ -13,14 +14,11 @@ class Movies extends React.Component {
 
   handleLike = movie => {
     const movies = [...this.state.movies];
-    // const index = movies.indexOf(movie);
-
-    if (!movie.liked) {
-          movie.liked = true;
-        } else {
-          movie.liked = !movie.liked
-        }
+    const index = movies.indexOf(movie);
+    movies[index] = { ...movies[index]};
+    movies[index].liked = !movies[index].liked;
     this.setState({ movies });
+    //In the future, call the backend server here too so the changes are persisted
   }
 
   render() {
@@ -32,14 +30,14 @@ class Movies extends React.Component {
       <>
         <p>Showing {count} movies in the database.</p>
         <table className='table'>
-          {/* <thead> */}
             <tr>
               <th scope='col'>Title</th>
               <th scope='col'>Genre</th>
               <th scope='col'>Stock</th>
               <th scope='col'>Rate</th>
+              <th />
+              <th />
             </tr>
-          {/* </thead> */}
 
           <tbody>
             {this.state.movies.map((movie) => (
@@ -48,7 +46,7 @@ class Movies extends React.Component {
                 <td>{movie.genre.name}</td>
                 <td>{movie.numberInStock}</td>
                 <td>{movie.dailyRentalRate}</td>
-                <td><i class={movie.liked ? 'fa fa-heart' : 'fa fa-heart-o'} aria-hidden="true" onClick={() => this.handleLike(movie)}></i></td>
+                <td><Like liked={movie.liked} onClick={() => this.handleLike(movie)}/></td>
                 <td>
                   <button
                     className='btn btn-danger'
