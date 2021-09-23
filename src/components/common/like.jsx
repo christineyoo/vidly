@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 
 //This is a controlled component because it receives all the data via props. It doesn't have its own state
 //So we can use a stateless functional component
