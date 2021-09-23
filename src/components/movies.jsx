@@ -1,32 +1,28 @@
-import React, { Component } from 'react';
+import React, { useState } from 'react';
 import { getMovies } from '../services/fakeMovieService';
 import Like from './common/like';
 
-class Movies extends React.Component {
-  state = {
-    movies: getMovies()
+export default function Movies() {
+  const [movies, setMovies] = useState(getMovies())
+
+  const handleDelete = (movie) => {
+    const movies2 = movies.filter((m) => m._id !== movie._id);
+    setMovies(movies2);
   };
 
-  handleDelete = (movie) => {
-    const movies = this.state.movies.filter((m) => m._id !== movie._id);
-    this.setState({ movies });
-  };
-
-  handleLike = movie => {
-    const movies = [...this.state.movies];
-    const index = movies.indexOf(movie);
-    movies[index] = { ...movies[index]};
-    movies[index].liked = !movies[index].liked;
-    this.setState({ movies });
+  const handleLike = movie => {
+    const movies2 = [...movies];
+    const index = movies2.indexOf(movie);
+    movies2[index] = { ...movies[index]};
+    movies2[index].liked = !movies2[index].liked;
+    setMovies(movies2);
     //In the future, call the backend server here too so the changes are persisted
   }
 
-  render() {
-      const { length: count } = this.state.movies;
+  const count = movies.length;
+  if (count === 0) return <p>There are no movies in the database</p>
 
-      if (count === 0) return <p>There are no movies in the database</p>
-
-    return (
+  return (
       <>
         <p>Showing {count} movies in the database.</p>
         <table className='table'>
@@ -40,17 +36,17 @@ class Movies extends React.Component {
             </tr>
 
           <tbody>
-            {this.state.movies.map((movie) => (
+            {movies.map((movie) => (
               <tr key={movie._id}>
                 <td>{movie.title}</td>
                 <td>{movie.genre.name}</td>
                 <td>{movie.numberInStock}</td>
                 <td>{movie.dailyRentalRate}</td>
-                <td><Like liked={movie.liked} onClick={() => this.handleLike(movie)}/></td>
+                <td><Like liked={movie.liked} onClick={() => handleLike(movie)}/></td>
                 <td>
                   <button
                     className='btn btn-danger'
-                    onClick={() => this.handleDelete(movie)}
+                    onClick={() => handleDelete(movie)}
                   >
                     Delete
                   </button>
@@ -61,7 +57,4 @@ class Movies extends React.Component {
         </table>
       </>
     );
-  }
 }
-
-export default Movies;
