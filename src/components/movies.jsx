@@ -5,7 +5,8 @@ import { getMovies } from '../services/fakeMovieService';
 
 export default function Movies() {
   const [movies, setMovies] = useState(getMovies());
-  const [pageSize, setPageSize] = useState(10); //4 movies per page
+  const [pageSize, setPageSize] = useState(4); //initial input is # of movies per page
+  const [currentPage, setCurrentPage] = useState(1);
 
   const handleDelete = (movie) => {
     const updatedMovies = movies.filter((m) => m._id !== movie._id);
@@ -22,7 +23,7 @@ export default function Movies() {
   };
 
   const handlePageChange = (page) => {
-    console.log('changed', page);
+    setCurrentPage(page);
   };
 
   const count = movies.length;
@@ -69,6 +70,7 @@ export default function Movies() {
         itemsCount={movies.length}
         pageSize={pageSize}
         onPageChange={handlePageChange}
+        currentPage={currentPage}
       />
     </>
   );
