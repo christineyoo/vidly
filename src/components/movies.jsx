@@ -7,6 +7,7 @@ import { getGenres } from '../services/fakeGenreService';
 import ListGroup from './common/listGroup';
 
 export default function Movies() {
+
   const [movies, setMovies] = useState([]);
   const [genres, setGenres] = useState([]);
   const [pageSize, setPageSize] = useState(4); //4 movies per page
@@ -100,5 +101,6 @@ export default function Movies() {
         />
       </div>
     </div>
+
   );
 }
