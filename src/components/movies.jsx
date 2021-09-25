@@ -12,12 +12,13 @@ export default function Movies() {
   const [genres, setGenres] = useState([]);
   const [pageSize, setPageSize] = useState(4); //4 movies per page
   const [currentPage, setCurrentPage] = useState(1);
+  const [selectedGenre, setSelectedGenre] = useState({})
 
   // useEffect acts like componentDidMount. This is where we call backend services
   useEffect(() => {
     setMovies(getMovies());
     setGenres(getGenres());
-  });
+  }, []);
 
   const handleDelete = (movie) => {
     const updatedMovies = movies.filter((m) => m._id !== movie._id);
@@ -38,7 +39,7 @@ export default function Movies() {
   };
 
   const handleGenreSelect = (genre) => {
-    // setCurrentGenre(genre);
+    setSelectedGenre(genre);
   };
 
   const count = movies.length;
@@ -49,11 +50,9 @@ export default function Movies() {
   return (
     <div className='row'>
       <div className='col-3'>
-        {/* we put textProperty and valueProperty so that ListGroup can be as flexible as possible - in case an object doesn't have the .name and ._id properties. We don't want to couple ListGroup with this specific genre object type only. */}
         <ListGroup
           items={genres}
-          textProperty='name'
-          valueProperty='_id'
+          selectedItem={selectedGenre}
           onitemSelect={handleGenreSelect}
         />
       </div>
