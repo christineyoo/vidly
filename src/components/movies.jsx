@@ -36,15 +36,8 @@ export default function Movies() {
     //In the future, call the backend server here too so the changes are persisted
   };
 
-  const handleSort = (path) => {
-    const sortedColumn = { ...sortColumn };
-    if (sortedColumn.path === path)
-      sortedColumn.order = sortedColumn.order === 'asc' ? 'desc' : 'asc';
-    else {
-      sortedColumn.path = path;
-      sortedColumn.order = 'asc';
-    }
-    setSortColumn(sortedColumn);
+  const handleSort = (sortColumn) => {
+    setSortColumn(sortColumn);
   };
 
   const handlePageChange = (page) => {
@@ -82,6 +75,7 @@ export default function Movies() {
         <p>Showing {filtered.length} movies in the database.</p>
         <MoviesTable
           paginatedMovies={paginatedMovies}
+          sortColumn={sortColumn}
           onLike={handleLike}
           onDelete={handleDelete}
           onSort={handleSort}
