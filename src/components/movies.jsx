@@ -15,8 +15,9 @@ export default function Movies() {
 
   // useEffect acts like componentDidMount. This is where we call backend services
   useEffect(() => {
+    const genres = [{name: 'All Genres'}, ...getGenres()]
     setMovies(getMovies());
-    setGenres(getGenres());
+    setGenres(genres);
   }, []);
 
   const handleDelete = (movie) => {
@@ -39,12 +40,13 @@ export default function Movies() {
 
   const handleGenreSelect = (genre) => {
     setSelectedGenre(genre);
+    setCurrentPage(1);
   };
 
   const count = movies.length;
   if (count === 0) return <p>There are no movies in the database</p>;
 
-  const filtered = selectedGenre.name
+  const filtered = selectedGenre && selectedGenre._id
     ? movies.filter((m) => m.genre._id === selectedGenre._id)
     : movies;
 
