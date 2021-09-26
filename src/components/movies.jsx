@@ -15,7 +15,7 @@ export default function Movies() {
 
   // useEffect acts like componentDidMount. This is where we call backend services
   useEffect(() => {
-    const genres = [{ name: 'All Genres' }, ...getGenres()];
+    const genres = [{ _id: '', name: 'All Genres' }, ...getGenres()];
     setMovies(getMovies());
     setGenres(genres);
   }, []);
@@ -32,6 +32,10 @@ export default function Movies() {
     updatedMovies[index].liked = !updatedMovies[index].liked;
     setMovies(updatedMovies);
     //In the future, call the backend server here too so the changes are persisted
+  };
+
+  const handleSort = (path) => {
+    console.log(path);
   };
 
   const handlePageChange = (page) => {
@@ -68,6 +72,7 @@ export default function Movies() {
           paginatedMovies={paginatedMovies}
           onLike={handleLike}
           onDelete={handleDelete}
+          onSort={handleSort}
         />
         <Pagination
           itemsCount={filtered.length}
