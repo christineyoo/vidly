@@ -7,12 +7,11 @@ import { getGenres } from '../services/fakeGenreService';
 import ListGroup from './common/listGroup';
 
 export default function Movies() {
-
   const [movies, setMovies] = useState([]);
   const [genres, setGenres] = useState([]);
   const [pageSize, setPageSize] = useState(4); //4 movies per page
   const [currentPage, setCurrentPage] = useState(1);
-  const [selectedGenre, setSelectedGenre] = useState({})
+  const [selectedGenre, setSelectedGenre] = useState({});
 
   // useEffect acts like componentDidMount. This is where we call backend services
   useEffect(() => {
@@ -45,7 +44,11 @@ export default function Movies() {
   const count = movies.length;
   if (count === 0) return <p>There are no movies in the database</p>;
 
-  const paginatedMovies = paginate(movies, currentPage, pageSize);
+  const filtered = selectedGenre.name
+    ? movies.filter((m) => m.genre._id === selectedGenre._id)
+    : movies;
+
+  const paginatedMovies = paginate(filtered, currentPage, pageSize);
 
   return (
     <div className='row'>
@@ -57,7 +60,7 @@ export default function Movies() {
         />
       </div>
       <div className='col'>
-        <p>Showing {count} movies in the database.</p>
+        <p>Showing {filtered.length} movies in the database.</p>
         <table className='table'>
           <thead>
             <tr>
@@ -93,13 +96,12 @@ export default function Movies() {
           </tbody>
         </table>
         <Pagination
-          itemsCount={movies.length}
+          itemsCount={filtered.length}
           pageSize={pageSize}
           currentPage={currentPage}
           onPageChange={handlePageChange}
         />
       </div>
     </div>
-
   );
 }
