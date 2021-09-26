@@ -5,6 +5,7 @@ import { paginate } from '../utils/paginate';
 import { getMovies } from '../services/fakeMovieService';
 import { getGenres } from '../services/fakeGenreService';
 import ListGroup from './common/listGroup';
+import _ from 'lodash';
 
 export default function Movies() {
   const [movies, setMovies] = useState([]);
@@ -12,6 +13,7 @@ export default function Movies() {
   const [pageSize, setPageSize] = useState(4); //4 movies per page
   const [currentPage, setCurrentPage] = useState(1);
   const [selectedGenre, setSelectedGenre] = useState({});
+  const [sortColumn, setSortColumn] = useState({ path: 'title', order: 'asc' });
 
   // useEffect acts like componentDidMount. This is where we call backend services
   useEffect(() => {
@@ -35,7 +37,14 @@ export default function Movies() {
   };
 
   const handleSort = (path) => {
-    console.log(path);
+    const sortedColumn = { ...sortColumn };
+    if (sortedColumn.path === path)
+      sortedColumn.order = sortedColumn.order === 'asc' ? 'desc' : 'asc';
+    else {
+      sortedColumn.path = path;
+      sortedColumn.order = 'asc';
+    }
+    setSortColumn(sortedColumn);
   };
 
   const handlePageChange = (page) => {
@@ -50,12 +59,15 @@ export default function Movies() {
   const count = movies.length;
   if (count === 0) return <p>There are no movies in the database</p>;
 
+  //Filter, then sort, then paginate.
   const filtered =
     selectedGenre && selectedGenre._id
       ? movies.filter((m) => m.genre._id === selectedGenre._id)
       : movies;
 
-  const paginatedMovies = paginate(filtered, currentPage, pageSize);
+  const sorted = _.orderBy(filtered, [sortColumn.path], [sortColumn.order]);
+
+  const paginatedMovies = paginate(sorted, currentPage, pageSize);
 
   return (
     <div className='row'>
